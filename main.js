@@ -14,12 +14,6 @@ const BACK_END_PATH = 'http://localhost:8080/students'
 //     uploadStudent(fname,lname,age);
 // }
 
-function test(){
-    document.getElementById("id_original").textContent = "test1";
-    document.getElementById("fname_original").textContent = "test1";
-    document.getElementById("lname_original").textContent = "test1";
-    document.getElementById("age_original").textContent = "test1"; 
-}
 
 function submitStudent() {
     var fname = document.getElementById("fname").value;
@@ -101,7 +95,8 @@ async function getStudents(){
 function uploadStudent(fname,lname,age){
     const apiUrl = 'http://localhost:8080/students';
     const data = {
-    name: fname+" "+lname,
+    fname: fname,
+    lname: lname,
     age: age,
     };
 
@@ -181,10 +176,15 @@ function updateTable(data){
         tr.classList.add("row");
 
         // Insert a cell at the end of the row
-        var name = tr.insertCell();
-        var nameText = document.createTextNode(`${data[i].name}`);
-        name.appendChild(nameText);
-        name.classList.add("rowDataName")
+        var fname = tr.insertCell();
+        var fnameText = document.createTextNode(`${data[i].fname}`);
+        fname.appendChild(fnameText);
+        fname.classList.add("rowDataFName")
+
+        var lname = tr.insertCell();
+        var lnameText = document.createTextNode(`${data[i].lname}`);
+        lname.appendChild(lnameText);
+        lname.classList.add("rowDataLName")
 
         var age = tr.insertCell();
         var ageText = document.createTextNode(`${data[i].age}`);
@@ -220,16 +220,23 @@ function updateTableRows(){
     var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0];
     for(i = rowsAlreadyInserted;i<data.length||rowsInserted<maxTableSize;i++){
          // Insert a row at the end of table
-         var newRow = tbodyRef.insertRow();
+         var tr = tbodyRef.insertRow();
 
          // Insert a cell at the end of the row
-         var name = newRow.insertCell();
-         var nameText = document.createTextNode(`${data[i].name}`);
-         name.appendChild(nameText);
- 
-         var age = newRow.insertCell();
-         var ageText = document.createTextNode(`${data[i].age}`);
-         age.appendChild(ageText);
+         var fname = tr.insertCell();
+        var fnameText = document.createTextNode(`${data[i].fname}`);
+        fname.appendChild(fnameText);
+        fname.classList.add("rowDataFName")
+
+        var lname = tr.insertCell();
+        var lnameText = document.createTextNode(`${data[i].lname}`);
+        lname.appendChild(lnameText);
+        lname.classList.add("rowDataLName")
+
+        var age = tr.insertCell();
+        var ageText = document.createTextNode(`${data[i].age}`);
+        age.appendChild(ageText);
+        age.classList.add("rowDataAge")
  
          rowsInserted++;
     }
@@ -302,9 +309,8 @@ async function updateStudentPage(){
     if(studentToUpdate != null){
 
         var id = studentToUpdate.getAttribute('id')
-        var name = studentToUpdate.querySelector(".rowDataName").innerHTML.split(" ");
-        var fname = name[0];
-        var lname = name[1];
+        var fname = studentToUpdate.querySelector(".rowDataFName")
+        var lname = studentToUpdate.querySelector(".rowDataLName")
         var age = studentToUpdate.querySelector(".rowDataAge").innerHTML;
         // console.log(fname)
         // console.log(lname)
@@ -342,7 +348,8 @@ async function updateStudent(fname,lname,age,idOfstudentToUpdate){
     const url = 'http://localhost:8080/students'+'/'+idOfstudentToUpdate
 
     const data = {
-        name: fname+" "+lname,
+        fname: fname,
+        lname: lname,
         age: age,
         };
     
@@ -453,7 +460,7 @@ function DeleteObjectWithSpecificKeyValue(object,objectKey,objectValue){
 
 //this throws error when loaded in create student page
 document.addEventListener("click",e =>{
-    if(e.target.matches(".rowDataName") || e.target.matches(".rowDataAge")){
+    if(e.target.matches(".rowDataFName") || e.target.matches(".rowDataLName") || e.target.matches(".rowDataAge")){
         var tr = e.target.parentNode
         var id = tr.id
         for (var i = 0, row; row = studentTable.rows[i]; i++){
