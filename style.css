@@ -1,0 +1,17 @@
+#test {
+    color: blue;
+}
+/* table
+{
+  border: 5px solid #900;
+} */
+.row
+{
+  border: 5px solid #090;
+  background-color: yellow;
+}
+
+.row.clicked{
+border: 5px solid #090;
+  background-color: blue;
+} 

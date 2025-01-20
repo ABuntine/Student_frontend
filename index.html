@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer src="main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<p id="test">Hello World</p>
+<body onload ="getStudents();"> 
+    <!-- onload ="getStudents();" -->
+    
+    <button onclick="getStudents();">Refresh</button> 
+    <button onclick="deleteAllStudents();">Delete All</button><br>
+    <a href="createStudent.html" class="btn btn-info" role="button">Create New Student</a><br>
+    <p id="demo">Not Working</p>
+    <table class="StudentTableClass" id="StudentTable">
+        <thead>
+            <tr>
+                <!-- <th>Student Table</th> -->
+                <td>Name</td>
+                <td>Age</td>
+            </tr>
+        </thead>
+        <tbody class="StudentTableBodyClass"></tbody>
+                
+    </table>
+    <p id="tableSize"></p>
+    <!-- <button onclick="updateTableRows();">Next Page</button><br> -->
+     <button onclick="deleteStudent();">Delete Student</button>
+     <!-- <form action="updateStudent.html">
+        <input type="submit" value="Update Student" />
+    </form> -->
+     <!-- <a href="updateStudent.html" class="btn btn-info" role="button">Update Student</a> -->
+     <button onclick="updateStudentPage();">Update Student</button>
+    
+</body>
+</html>
+
+
