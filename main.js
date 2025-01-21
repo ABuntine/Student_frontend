@@ -1,7 +1,19 @@
+// import { response } from "express";
+
 const studentTable = document.getElementById("StudentTable");
 const maxTableSize = 10;
 var tableData;
 const BACK_END_PATH = 'http://localhost:8080/students'
+
+function isEmpty(obj) {
+    for (const prop in obj) {
+      if (Object.hasOwn(obj, prop)) {
+        return false;
+      }
+    }
+  
+    return true;
+  }
 
 
 // import {testValues} from './values.js';
@@ -26,12 +38,7 @@ function submitStudentUpdate() {
     var fname = document.getElementById("fname").value;
     var lname = document.getElementById("lname").value;
     var age = document.getElementById("age").value;
-    var id = document.getElementById("id_original").innerHTML;
-    console.log(fname)
-    console.log(lname)
-    console.log(age)
-    console.log(id)
-    updateStudent(fname,lname,age,id);
+    updateStudent(fname,lname,age,localStorage.getItem('id'));
     // alert("Hello World")
 }
 
@@ -309,8 +316,8 @@ async function updateStudentPage(){
     if(studentToUpdate != null){
 
         var id = studentToUpdate.getAttribute('id')
-        var fname = studentToUpdate.querySelector(".rowDataFName")
-        var lname = studentToUpdate.querySelector(".rowDataLName")
+        var fname = studentToUpdate.querySelector(".rowDataFName").innerHTML
+        var lname = studentToUpdate.querySelector(".rowDataLName").innerHTML
         var age = studentToUpdate.querySelector(".rowDataAge").innerHTML;
         // console.log(fname)
         // console.log(lname)
@@ -347,12 +354,16 @@ async function updateStudent(fname,lname,age,idOfstudentToUpdate){
    
     const url = 'http://localhost:8080/students'+'/'+idOfstudentToUpdate
 
-    const data = {
-        fname: fname,
-        lname: lname,
-        age: age,
-        };
-    
+    const data = {}
+
+
+    if(fname) data.fname = fname
+    if(lname) data.lname = lname    
+    if(age) data.age = age
+
+    if(!isEmpty(data)){
+
+
         const requestOptions = {
         method: 'PATCH',
         headers: {
@@ -366,21 +377,25 @@ async function updateStudent(fname,lname,age,idOfstudentToUpdate){
 
         try{
 
-        const response = await fetch(url,requestOptions)
+            const response = await fetch(url,requestOptions)
         
             if(!response.ok){
                 throw new Error("Could not update student");
             }
             else{
-                console.log("Student updated")
+                document.getElementById("updateStudent_Response").innerHTML = "Student Updated"
             }
+        
+            
             
         }
         catch(error){
             console.error(error);
         }
+
         
-   
+        
+    }
     
 
     
@@ -474,10 +489,10 @@ document.addEventListener("click",e =>{
 document.addEventListener("DOMContentLoaded", function(){
     var e = document.getElementById("update_student_title")
     if(e != null){
-        document.getElementById("id_original").innerHTML = localStorage.getItem('id')
-        document.getElementById("fname_original").innerHTML = localStorage.getItem('fname');
-        document.getElementById("lname_original").innerHTML = localStorage.getItem('lname');
-        document.getElementById("age_original").innerHTML = localStorage.getItem('age');
+        // document.getElementById("id_original").innerHTML = localStorage.getItem('id')
+        document.getElementById("fname_original").innerHTML = "Original First Name: " + localStorage.getItem('fname');
+        document.getElementById("lname_original").innerHTML = "Original Last Name: " + localStorage.getItem('lname');
+        document.getElementById("age_original").innerHTML = "Original Age: " + localStorage.getItem('age');
         
     }
     
