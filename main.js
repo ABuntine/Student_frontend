@@ -3,6 +3,7 @@
 const studentTable = document.getElementById("StudentTable");
 const maxTableSize = 10;
 var tableData;
+var rawData;
 const BACK_END_PATH = 'http://localhost:8080/students'
 
 function isEmpty(obj) {
@@ -19,12 +20,6 @@ function isEmpty(obj) {
 // import {testValues} from './values.js';
 // console.log(testValues);
 
-// function othername() {
-//     var fname = document.getElementById("fname").value;
-//     var lname = document.getElementById("lname").value;
-//     var age = document.getElementById("age").value;
-//     uploadStudent(fname,lname,age);
-// }
 
 
 function submitStudent() {
@@ -35,10 +30,12 @@ function submitStudent() {
 }
 
 function submitStudentUpdate() {
+    var id = localStorage.getItem('id');
     var fname = document.getElementById("fname").value;
     var lname = document.getElementById("lname").value;
     var age = document.getElementById("age").value;
-    updateStudent(fname,lname,age,localStorage.getItem('id'));
+    var enrolledDate = localStorage.getItem('enrolledDate');
+    updateStudent(fname,lname,age,id,enrolledDate);
     // alert("Hello World")
 }
 
@@ -74,6 +71,7 @@ async function getStudents(){
         else{
             const data = await response.json();
             tableData = data;
+            rawData = data;
         
         
             if(Object.keys(data).length === 0) {
@@ -96,6 +94,9 @@ async function getStudents(){
     // updateTable();
     // testValues.test++;
     // console.log(testValues);
+
+    getSingleStudentFromRawData(1);
+    
 }
 
 
@@ -337,22 +338,44 @@ async function updateStudentPage(){
         // console.log(url)
         // window.location.href = url
 
-        localStorage.setItem('id', id);
-        localStorage.setItem('fname', fname);
-        localStorage.setItem('lname', lname);
-        localStorage.setItem('age', age);
+        // localStorage.setItem('id', id);
+        // localStorage.setItem('fname', fname);
+        // localStorage.setItem('lname', lname);
+        // localStorage.setItem('age', age);
+
+        getSingleStudentFromRawData(id);
+        // console.log(localStorage.getItem('student'))
 
     }
 
   
 }
 
-async function updateStudent(fname,lname,age,idOfstudentToUpdate){
+function getSingleStudentFromRawData(id){
+    // console.log(rawData);
+    
+    
+    for(var i = 0; i < rawData.length; i++){
+        
+        if(rawData[i]._id == id){
+            console.log("Student Found!")
+            // localStorage.setItem('student',rawData[i]);
+            localStorage.setItem('id', id);
+            localStorage.setItem('fname', rawData[i].fname);
+            localStorage.setItem('lname', rawData[i].lname);
+            localStorage.setItem('age', rawData[i].age);
+            localStorage.setItem('enrolledDate', rawData[i].enrolledDate);
+            console.log(rawData[i].enrolledDate)
+        }
+    }
+}
+
+async function updateStudent(fname,lname,age,id,enrolledDate){
 
     
 
    
-    const url = 'http://localhost:8080/students'+'/'+idOfstudentToUpdate
+    const url = 'http://localhost:8080/students'+'/'+id
 
     const data = {}
 
@@ -360,6 +383,7 @@ async function updateStudent(fname,lname,age,idOfstudentToUpdate){
     if(fname) data.fname = fname
     if(lname) data.lname = lname    
     if(age) data.age = age
+    data.enrolledDate = enrolledDate
 
     if(!isEmpty(data)){
 
@@ -489,7 +513,7 @@ document.addEventListener("click",e =>{
 document.addEventListener("DOMContentLoaded", function(){
     var e = document.getElementById("update_student_title")
     if(e != null){
-        // document.getElementById("id_original").innerHTML = localStorage.getItem('id')
+               
         document.getElementById("fname_original").innerHTML = "Original First Name: " + localStorage.getItem('fname');
         document.getElementById("lname_original").innerHTML = "Original Last Name: " + localStorage.getItem('lname');
         document.getElementById("age_original").innerHTML = "Original Age: " + localStorage.getItem('age');
