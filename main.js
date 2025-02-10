@@ -117,18 +117,10 @@ function uploadStudent(fname,lname,age){
     };
 
     fetch(apiUrl, requestOptions)
+    .then(response => response.json())
     .then(response => {
-    if (!response.ok) {
-        // throw new Error('Network response was not ok');
-        alert("Network response was not ok");
-    }
-    return response.json();
+        localStorage.setItem("responseMessage",response.message)
     })
-    .catch(error => {
-    console.error
-
-    ('Error:', error);
-    });
     // alert("Test");
 }
 
@@ -262,7 +254,9 @@ function updateTableRows(){
 function displayNumberOfStudents(numberOfStudents){
     
     document.getElementById("test").textContent = numberOfStudents;
-    console.log(document.getElementById("test"));
+    // console.log("Test 0");
+    // console.log(document.getElementById("test"));
+    
 }
 
 
@@ -294,13 +288,14 @@ async function deleteStudent(){
         catch(error){
             console.error(error);
         }
+
+        removeDeletedStudentFromTable(idOfStudentToDelete);
+    
+    
+        updateTable(tableData)
     }
 
     
-    removeDeletedStudentFromTable(idOfStudentToDelete);
-    
-    
-    updateTable(tableData)
 }
 
 async function updateStudentPage(){
@@ -317,9 +312,9 @@ async function updateStudentPage(){
     if(studentToUpdate != null){
 
         var id = studentToUpdate.getAttribute('id')
-        var fname = studentToUpdate.querySelector(".rowDataFName").innerHTML
-        var lname = studentToUpdate.querySelector(".rowDataLName").innerHTML
-        var age = studentToUpdate.querySelector(".rowDataAge").innerHTML;
+        // var fname = studentToUpdate.querySelector(".rowDataFName").innerHTML
+        // var lname = studentToUpdate.querySelector(".rowDataLName").innerHTML
+        // var age = studentToUpdate.querySelector(".rowDataAge").innerHTML;
         // console.log(fname)
         // console.log(lname)
         // console.log(age)
@@ -383,10 +378,12 @@ async function updateStudent(fname,lname,age,id,enrolledDate){
     if(fname) data.fname = fname
     if(lname) data.lname = lname    
     if(age) data.age = age
-    data.enrolledDate = enrolledDate
+    
 
     if(!isEmpty(data)){
 
+
+        data.enrolledDate = enrolledDate
 
         const requestOptions = {
         method: 'PATCH',
@@ -396,21 +393,28 @@ async function updateStudent(fname,lname,age,id,enrolledDate){
         body: JSON.stringify(data),
         };
 
-        console.log(url)
-        console.log(requestOptions)
+        // console.log(url)
+        // console.log(requestOptions)
+
+        var status;
 
         try{
 
-            const response = await fetch(url,requestOptions)
-        
-            if(!response.ok){
-                throw new Error("Could not update student");
-            }
-            else{
-                document.getElementById("updateStudent_Response").innerHTML = "Student Updated"
-            }
-        
             
+            fetch(url,requestOptions)
+            .then(response => {
+                status = response.status
+                return response.json()
+            })
+            .then(response => {
+                if(status == 200) {
+                    window.location.href = 'studentUpdated.html'
+                    // var status = document.getElementById("status")
+                    // status.innerHTML = response.message
+                    // console.log("Test")
+                }
+                else document.getElementById("updateStudent_Response").innerHTML = response.message
+            })
             
         }
         catch(error){
@@ -511,13 +515,24 @@ document.addEventListener("click",e =>{
 })
 
 document.addEventListener("DOMContentLoaded", function(){
-    var e = document.getElementById("update_student_title")
-    if(e != null){
+    var e = document.getElementById("title").innerHTML
+    if(e == "Update Student"){
                
         document.getElementById("fname_original").innerHTML = "Original First Name: " + localStorage.getItem('fname');
         document.getElementById("lname_original").innerHTML = "Original Last Name: " + localStorage.getItem('lname');
         document.getElementById("age_original").innerHTML = "Original Age: " + localStorage.getItem('age');
         
     }
+    else if(e == "Create Student"){
+        var response = localStorage.getItem("responseMessage")
+        response = response ? response : null
+        // console.log(response)
+        document.getElementById("createStudent_Response").innerHTML = response
+    }
+    else if(e == "Document"){
+        localStorage.setItem("responseMessage",null) 
+    }
     
     });
+
+   
