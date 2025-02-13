@@ -72,6 +72,7 @@ async function getStudents(){
             const data = await response.json();
             tableData = data;
             rawData = data;
+            
         
         
             if(Object.keys(data).length === 0) {
@@ -119,6 +120,7 @@ function uploadStudent(fname,lname,age){
     fetch(apiUrl, requestOptions)
     .then(response => response.json())
     .then(response => {
+        console.log(response)
         localStorage.setItem("responseMessage",response.message)
     })
     // alert("Test");
@@ -203,6 +205,14 @@ function updateTable(data){
     // var lastStudent = rowsInserted;
 
     // document.getElementById("tableSize").innerHTML = `Students ${firstStudent}-${testValues.rowsAlreadyInserted} of ${data.length}`;
+
+    //update change page buttons
+    var prevButton = document.getElementById("prevButton")
+    prevButton.className = "changePage invalid"
+    var nextButton = document.getElementById("nextButton")
+    if(tableData.length > 3) nextButton.className = "changePage"
+    else nextButton.className = "changePage invalid"
+    
 
 }
 
@@ -407,6 +417,7 @@ async function updateStudent(fname,lname,age,id,enrolledDate){
                 return response.json()
             })
             .then(response => {
+                console.log(response)
                 if(status == 200) {
                     window.location.href = 'studentUpdated.html'
                     // var status = document.getElementById("status")
@@ -419,6 +430,7 @@ async function updateStudent(fname,lname,age,id,enrolledDate){
         }
         catch(error){
             console.error(error);
+            document.getElementById("updateStudent_Response").innerHTML = "Test"
         }
 
         
@@ -531,6 +543,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     else if(e == "Document"){
         localStorage.setItem("responseMessage",null) 
+        
+        
+        
     }
     
     });

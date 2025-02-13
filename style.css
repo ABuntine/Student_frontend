@@ -19,3 +19,11 @@ border: 5px solid #090;
 #updateStudent_Response{
   color: blue;
 }
+
+.changePage{
+  background-color: green;
+}
+
+.changePage.invalid{
+  background-color: red;
+}
