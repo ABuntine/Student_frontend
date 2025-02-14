@@ -163,29 +163,64 @@ function updateTable(data){
     
     var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
     var tableSize = tbodyRef.length
-    console.log(tableSize)
-    console.log(data[0])
 
-    var indexOfTable = 0
-    // var iteration = 0
+    var i = 0
 
-    for(i in data){
-        if(indexOfTable == tableSize ) break
+    while(i<tableSize){
 
+        // var nextStudentIndex = lastStudentIndex+i+1
         var tr = tbodyRef[i]
-        tr.id = data[i]._id
-        tr.getElementsByTagName('td')[0].innerHTML = data[i].fname
-        tr.getElementsByTagName('td')[0].className = "rowDataFName"
-        tr.getElementsByTagName('td')[1].innerHTML = data[i].lname
-        tr.getElementsByTagName('td')[1].className = "rowDataLName"
-        tr.getElementsByTagName('td')[2].innerHTML = data[i].age
-        tr.getElementsByTagName('td')[2].className = "rowDataAge"
-        tr.className = "row";
-        // console.log(tr)
 
+        if(i >= tableData.length){
 
-        indexOfTable++
+            tr.id = "emptyRow"+(i+1)
+            tr.getElementsByTagName('td')[0].innerHTML = ""
+            tr.getElementsByTagName('td')[0].removeAttribute("class")
+            tr.getElementsByTagName('td')[1].innerHTML = ""
+            tr.getElementsByTagName('td')[1].removeAttribute("class")
+            tr.getElementsByTagName('td')[2].innerHTML = ""
+            tr.getElementsByTagName('td')[2].removeAttribute("class")
+            tr.className = "row"
+        }
+        else{
+            
+            // var nextStudent = tableData[nextStudentIndex]
+
+            tr.id = tableData[i]._id
+            tr.getElementsByTagName('td')[0].innerHTML = tableData[i].fname
+            tr.getElementsByTagName('td')[0].className = "rowDataFName"
+            tr.getElementsByTagName('td')[1].innerHTML = tableData[i].lname
+            tr.getElementsByTagName('td')[1].className = "rowDataLName"
+            tr.getElementsByTagName('td')[2].innerHTML = tableData[i].age
+            tr.getElementsByTagName('td')[2].className = "rowDataAge"
+            tr.className = "row"
+        }
+
+        i++
     }
+    // console.log(tableSize)
+    // console.log(data[0])
+
+    // var indexOfTable = 0
+    // // var iteration = 0
+
+    // for(i in data){
+    //     if(indexOfTable == tableSize ) break
+
+    //     var tr = tbodyRef[i]
+    //     tr.id = data[i]._id
+    //     tr.getElementsByTagName('td')[0].innerHTML = data[i].fname
+    //     tr.getElementsByTagName('td')[0].className = "rowDataFName"
+    //     tr.getElementsByTagName('td')[1].innerHTML = data[i].lname
+    //     tr.getElementsByTagName('td')[1].className = "rowDataLName"
+    //     tr.getElementsByTagName('td')[2].innerHTML = data[i].age
+    //     tr.getElementsByTagName('td')[2].className = "rowDataAge"
+    //     tr.className = "row";
+    //     // console.log(tr)
+
+
+    //     indexOfTable++
+    // }
     
     
     
