@@ -56,7 +56,7 @@ async function getStudents(){
     // while (tbodyRef.rows.length > 0) {
     //     tbodyRef.deleteRow(0);
     // }
-    deleteStudentTable();
+    // deleteStudentTable();
     try{
         const url = 'http://localhost:8080/students';
 
@@ -150,11 +150,10 @@ async function deleteAllStudents(){
 
 }
 
-
 function updateTable(data){
     
     // console.log("Hello World");
-    deleteStudentTable()
+    // deleteStudentTable()
     
     var rowsInserted = 0;
     // var firstStudent = testValues.rowsAlreadyInserted+1;
@@ -162,42 +161,35 @@ function updateTable(data){
 
     // const dataArray = JSON.parse(data);
     
-    var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0];
-    // console.log(tbodyRef)
+    var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    var tableSize = tbodyRef.length
+    console.log(tableSize)
+    console.log(data[0])
 
-    
+    var indexOfTable = 0
+    // var iteration = 0
+
     for(i in data){
-        
-        if(maxTableSize==rowsInserted) break;
-        // console.log(data[i].name)
-        // html += `Name: ${data[i].name} Age: ${data[i].age}`+"<br />";
+        if(indexOfTable == tableSize ) break
 
-        // Insert a row at the end of table
-        var tr = tbodyRef.insertRow();
-        tr.id = data[i]._id;
-        tr.classList.add("row");
+        var tr = tbodyRef[i]
+        tr.id = data[i]._id
+        tr.getElementsByTagName('td')[0].innerHTML = data[i].fname
+        tr.getElementsByTagName('td')[0].className = "rowDataFName"
+        tr.getElementsByTagName('td')[1].innerHTML = data[i].lname
+        tr.getElementsByTagName('td')[1].className = "rowDataLName"
+        tr.getElementsByTagName('td')[2].innerHTML = data[i].age
+        tr.getElementsByTagName('td')[2].className = "rowDataAge"
+        tr.className = "row";
+        // console.log(tr)
 
-        // Insert a cell at the end of the row
-        var fname = tr.insertCell();
-        var fnameText = document.createTextNode(`${data[i].fname}`);
-        fname.appendChild(fnameText);
-        fname.classList.add("rowDataFName")
 
-        var lname = tr.insertCell();
-        var lnameText = document.createTextNode(`${data[i].lname}`);
-        lname.appendChild(lnameText);
-        lname.classList.add("rowDataLName")
-
-        var age = tr.insertCell();
-        var ageText = document.createTextNode(`${data[i].age}`);
-        age.appendChild(ageText);
-        age.classList.add("rowDataAge")
-
-        // rowsInserted++;
-
+        indexOfTable++
     }
-
-    // console.log(data.length);
+    
+    
+    
+     // console.log(data.length);
     displayNumberOfStudents(data.length);
     // testValues.rowsAlreadyInserted = rowsInserted;
     // hooks.incrementRows(rowsInserted);
@@ -212,54 +204,221 @@ function updateTable(data){
     var nextButton = document.getElementById("nextButton")
     if(tableData.length > 3) nextButton.className = "changePage"
     else nextButton.className = "changePage invalid"
+   
     
 
 }
 
-function updateTableRows(){
+function prevButton(){
 
-
+    //get id of first student in table
+   
+    var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    var id = tbodyRef[0].getAttribute("id")
+    // console.log(id)
     
-    var data = tableData;
-    
-    deleteStudentTable();
-    var rowsInserted = 0;
-    // var firstStudent = testValues.rowsAlreadyInserted+1;
-    var firstStudent = 1;
+    var firstStudentIndex = tableData.findIndex(x => x._id ===id);
+    // console.log(firstStudentIndex)
 
-    var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0];
-    for(i = rowsAlreadyInserted;i<data.length||rowsInserted<maxTableSize;i++){
-         // Insert a row at the end of table
-         var tr = tbodyRef.insertRow();
+    if(firstStudentIndex > 0 ){
 
-         // Insert a cell at the end of the row
-         var fname = tr.insertCell();
-        var fnameText = document.createTextNode(`${data[i].fname}`);
-        fname.appendChild(fnameText);
-        fname.classList.add("rowDataFName")
+        
 
-        var lname = tr.insertCell();
-        var lnameText = document.createTextNode(`${data[i].lname}`);
-        lname.appendChild(lnameText);
-        lname.classList.add("rowDataLName")
+        //iterate over current table
+            //replace current table with new data. 
+            
 
-        var age = tr.insertCell();
-        var ageText = document.createTextNode(`${data[i].age}`);
-        age.appendChild(ageText);
-        age.classList.add("rowDataAge")
- 
-         rowsInserted++;
+        var i = 0
+
+        // console.log("Test 1")
+        
+        while(i<tbodyRef.length){
+
+            var previousStudentIndex = (firstStudentIndex-tbodyRef.length)+i
+            var tr = tbodyRef[i]
+
+            var previousStudent = tableData[previousStudentIndex]
+
+            tr.id = previousStudent._id
+            tr.getElementsByTagName('td')[0].innerHTML = previousStudent.fname
+            tr.getElementsByTagName('td')[0].className = "rowDataFName"
+            tr.getElementsByTagName('td')[1].innerHTML = previousStudent.lname
+            tr.getElementsByTagName('td')[1].className = "rowDataLName"
+            tr.getElementsByTagName('td')[2].innerHTML = previousStudent.age
+            tr.getElementsByTagName('td')[2].className = "rowDataAge"
+            tr.className = "row"
+
+            i++
+        }
+
+        // console.log("Test 2")
+
+        //if page has changed to previous, then next button has to be active
+        var nextButton = document.getElementById("nextButton")
+        nextButton.className = "changePage"
+
+        //check if last entry in table is last student or empty row. if so, turn off next button
+        id = tbodyRef[0].getAttribute("id")
+        // console.log(id)
+        
+        firstStudentIndex = tableData.findIndex(x => x._id ===id);
+        // console.log(firstStudentIndex)
+
+        if(firstStudentIndex == 0 ){
+            
+            var prevButton = document.getElementById("prevButton")
+            prevButton.className = "changePage invalid"
+        }
+
     }
 
-    
-    
-
-    // testValues.rowsAlreadyInserted+=rowsInserted;
-    // var lastStudent = rowsInserted;
-
-    // document.getElementById("tableSize").innerHTML = `Students ${firstStudent}-${testValues.rowsAlreadyInserted} of ${data.length}`;
 
 }
+
+function nextButton(){
+
+    //get id of last student in table
+    // need to add check if last entry in table is blank (in that case next button won't be used)
+    var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    var id = tbodyRef[tbodyRef.length-1].getAttribute("id")
+    // console.log(id)
+    
+    var lastStudentIndex = tableData.findIndex(x => x._id ===id);
+    console.log(lastStudentIndex)
+
+    if(lastStudentIndex < tableData.length -1 && lastStudentIndex != -1){
+
+        
+
+        //iterate over current table
+            //replace current table with new data. 
+            // replace with new student data . if it finishes, replace with empty cells
+
+        var i = 0
+
+        // console.log("Test 1")
+        
+        while(i<tbodyRef.length){
+
+            var nextStudentIndex = lastStudentIndex+i+1
+            var tr = tbodyRef[i]
+
+            if(nextStudentIndex >= tableData.length){
+
+                tr.id = "emptyRow"+(i+1)
+                tr.getElementsByTagName('td')[0].innerHTML = ""
+                tr.getElementsByTagName('td')[0].removeAttribute("class")
+                tr.getElementsByTagName('td')[1].innerHTML = ""
+                tr.getElementsByTagName('td')[1].removeAttribute("class")
+                tr.getElementsByTagName('td')[2].innerHTML = ""
+                tr.getElementsByTagName('td')[2].removeAttribute("class")
+                tr.className = "row"
+            }
+            else{
+                
+                var nextStudent = tableData[nextStudentIndex]
+
+                tr.id = nextStudent._id
+                tr.getElementsByTagName('td')[0].innerHTML = nextStudent.fname
+                tr.getElementsByTagName('td')[0].className = "rowDataFName"
+                tr.getElementsByTagName('td')[1].innerHTML = nextStudent.lname
+                tr.getElementsByTagName('td')[1].className = "rowDataLName"
+                tr.getElementsByTagName('td')[2].innerHTML = nextStudent.age
+                tr.getElementsByTagName('td')[2].className = "rowDataAge"
+                tr.className = "row"
+            }
+
+            i++
+        }
+
+        // console.log("Test 2")
+
+        //if page has changed to next, then prev button has to be active
+        var prevButton = document.getElementById("prevButton")
+        prevButton.className = "changePage"
+
+        //check if last entry in table is last student or empty row. if so, turn off next button
+        id = tbodyRef[tbodyRef.length-1].getAttribute("id")
+        // console.log(id)
+        
+        lastStudentIndex = tableData.findIndex(x => x._id ===id);
+        // console.log(lastStudentIndex)
+
+        if(lastStudentIndex == tableData.length -1 || lastStudentIndex == -1){
+            var nextButton = document.getElementById("nextButton")
+            nextButton.className = "changePage invalid"
+        }
+
+    }
+
+}
+
+
+// function updateTable(data){
+    
+//     // console.log("Hello World");
+//     deleteStudentTable()
+    
+//     var rowsInserted = 0;
+//     // var firstStudent = testValues.rowsAlreadyInserted+1;
+//     var firstStudent = 1;
+
+//     // const dataArray = JSON.parse(data);
+    
+//     var tbodyRef = document.getElementById('StudentTable').getElementsByTagName('tbody')[0];
+//     // console.log(tbodyRef)
+
+    
+//     for(i in data){
+        
+//         if(maxTableSize==rowsInserted) break;
+//         // console.log(data[i].name)
+//         // html += `Name: ${data[i].name} Age: ${data[i].age}`+"<br />";
+
+//         // Insert a row at the end of table
+//         var tr = tbodyRef.insertRow();
+//         tr.id = data[i]._id;
+//         tr.classList.add("row");
+
+//         // Insert a cell at the end of the row
+//         var fname = tr.insertCell();
+//         var fnameText = document.createTextNode(`${data[i].fname}`);
+//         fname.appendChild(fnameText);
+//         fname.classList.add("rowDataFName")
+
+//         var lname = tr.insertCell();
+//         var lnameText = document.createTextNode(`${data[i].lname}`);
+//         lname.appendChild(lnameText);
+//         lname.classList.add("rowDataLName")
+
+//         var age = tr.insertCell();
+//         var ageText = document.createTextNode(`${data[i].age}`);
+//         age.appendChild(ageText);
+//         age.classList.add("rowDataAge")
+
+//         // rowsInserted++;
+
+//     }
+
+//     // console.log(data.length);
+//     displayNumberOfStudents(data.length);
+//     // testValues.rowsAlreadyInserted = rowsInserted;
+//     // hooks.incrementRows(rowsInserted);
+
+//     // var lastStudent = rowsInserted;
+
+//     // document.getElementById("tableSize").innerHTML = `Students ${firstStudent}-${testValues.rowsAlreadyInserted} of ${data.length}`;
+
+//     //update change page buttons
+//     var prevButton = document.getElementById("prevButton")
+//     prevButton.className = "changePage invalid"
+//     var nextButton = document.getElementById("nextButton")
+//     if(tableData.length > 3) nextButton.className = "changePage"
+//     else nextButton.className = "changePage invalid"
+    
+
+// }
+
 
 function displayNumberOfStudents(numberOfStudents){
     
