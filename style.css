@@ -27,3 +27,7 @@ border: 5px solid #090;
 .changePage.invalid{
   background-color: red;
 }
+
+.selected{
+  background-color: pink;
+}

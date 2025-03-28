@@ -639,6 +639,34 @@ async function updateStudent(fname,lname,age,id,enrolledDate){
     // updateTable(tableData)
 }
 
+function reverseStudentData(){
+    var newData = []
+    var l = tableData.length-1
+    for(var i = 0;i<tableData.length;i++){
+        newData[i] = tableData[l-i]
+    }
+    tableData = newData
+    console.log(tableData)
+    updateTable(tableData)
+}
+
+// function setPrefToOrderUpdated(){
+//     // console.log("Test")
+    
+//     var orderUpdatedButton = document.getElementById("orderUpdatedPref")
+//     console.log(orderUpdatedButton.className)
+//     if(!orderUpdatedButton.classList.contains("selected")){
+//         document.getElementById("orderAddedPref").className = "pref"
+//         document.getElementById("orderUpdatedPref").className = "pref"
+//         document.getElementById("firstNamePref").className = "pref"
+//         document.getElementById("surNamePref").className = "pref"
+//         document.getElementById("agePref").className = "pref"
+//         console.log("It worked")
+//         orderUpdatedButton.classList.toggle("selected")
+//         console.log(document.getElementById("orderAddedPref"))
+//     }
+// }
+
 
 // Student logger specifc function
 function removeDeletedStudentFromTable(studentID){
@@ -716,6 +744,46 @@ document.addEventListener("click",e =>{
             if(row.id != id) row.classList.remove("clicked")
         }
         tr.classList.toggle("clicked")
+    }
+    else if(e.target.matches(".pref") && !e.target.matches(".selected")){
+        document.getElementById("orderAddedPref").className = "pref"
+        document.getElementById("orderUpdatedPref").className = "pref"
+        document.getElementById("firstNamePref").className = "pref"
+        document.getElementById("surNamePref").className = "pref"
+        document.getElementById("agePref").className = "pref"
+        switch(e.target.id){
+            case "orderAddedPref": break;
+            case "orderUpdatedPref": break;
+            case "firstNamePref": break;
+            case "surNamePref":{ var a = "Bye";console.log(a)}; break;
+            case "agePref":
+                // { 
+                // var orderData = tableData;
+                    
+                // for(var i = 0;i<tableData.length;i++){
+                //     orderData[i] = tableData[0]
+                //     // console.log(tableData[i])
+                // }
+                // console.log(orderData)
+                // tableData = orderData}
+            break;
+            
+            
+        }
+        // tableData.sort(compare())
+        updateTable(tableData);
+
+
+        e.target.classList.add("selected")
+        
+    }
+    else if(e.target.matches(".order") && !e.target.matches(".selected")){
+        
+        reverseStudentData()
+
+        document.getElementById("descOrder").classList.toggle("selected")
+        document.getElementById("ascOrder").classList.toggle("selected")
+
     }
     
 })
