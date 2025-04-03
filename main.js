@@ -650,22 +650,6 @@ function reverseStudentData(){
     updateTable(tableData)
 }
 
-// function setPrefToOrderUpdated(){
-//     // console.log("Test")
-    
-//     var orderUpdatedButton = document.getElementById("orderUpdatedPref")
-//     console.log(orderUpdatedButton.className)
-//     if(!orderUpdatedButton.classList.contains("selected")){
-//         document.getElementById("orderAddedPref").className = "pref"
-//         document.getElementById("orderUpdatedPref").className = "pref"
-//         document.getElementById("firstNamePref").className = "pref"
-//         document.getElementById("surNamePref").className = "pref"
-//         document.getElementById("agePref").className = "pref"
-//         console.log("It worked")
-//         orderUpdatedButton.classList.toggle("selected")
-//         console.log(document.getElementById("orderAddedPref"))
-//     }
-// }
 
 
 // Student logger specifc function
@@ -735,6 +719,46 @@ function DeleteObjectWithSpecificKeyValue(object,objectKey,objectValue){
     
 }
 
+function quicksort(array,key) {
+    if (array.length <= 1) {
+      return array;
+    }
+  
+    var pivot = array[0];
+    
+    
+    var left = []; 
+    var right = [];
+  
+    for (var i = 1; i < array.length; i++) {
+        // console.log(array[i][key] +" < " +pivot[key])
+        console.log(array[i][key] +" < " +pivot[key] + " : "+ (array[i][key] < pivot[key]))
+        array[i][key] < pivot[key] ? left.push(array[i]) : right.push(array[i]);
+    }
+
+    console.log(left)
+    console.log(right)
+    
+  
+    return quicksort(left,key).concat(pivot, quicksort(right,key));
+  };
+  
+  
+
+function orderAge(){
+    
+    var orderAsc = document.getElementById("ascOrder").className == "order selected";
+    console.log(orderAsc)
+
+    
+    tableData = quicksort(tableData,"age");
+    console.log(tableData)
+  
+    updateTable(tableData)
+
+
+}
+
 //this throws error when loaded in create student page
 document.addEventListener("click",e =>{
     if(e.target.matches(".rowDataFName") || e.target.matches(".rowDataLName") || e.target.matches(".rowDataAge")){
@@ -756,7 +780,7 @@ document.addEventListener("click",e =>{
             case "orderUpdatedPref": break;
             case "firstNamePref": break;
             case "surNamePref":{ var a = "Bye";console.log(a)}; break;
-            case "agePref":
+            case "agePref": orderAge();
                 // { 
                 // var orderData = tableData;
                     
